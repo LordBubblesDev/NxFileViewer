@@ -21,6 +21,6 @@ public class MainItem : DirectoryEntryItem
 
     public sealed override string Format => "Nso";
 
-    public string ModuleId => NsoHeader.ModuleId.Items.ToStrId();
+    public string ModuleId => NsoHeader.ModuleId.ToString()!;
 
 }

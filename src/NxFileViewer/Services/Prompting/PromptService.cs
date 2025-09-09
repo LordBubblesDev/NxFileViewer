@@ -5,7 +5,6 @@ using Emignatik.NxFileViewer.Localization;
 using Emignatik.NxFileViewer.Settings;
 using Emignatik.NxFileViewer.Tools;
 using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace Emignatik.NxFileViewer.Services.Prompting;
 
@@ -22,18 +21,17 @@ public class PromptService : IPromptService
 
     public string? PromptSelectDir(string title)
     {
-        var fileDialog = new CommonOpenFileDialog
+        var fileDialog = new OpenFolderDialog()
         {
             InitialDirectory = _appSettings.LastUsedDir,
             Multiselect = false,
-            IsFolderPicker = true,
             Title = title
         };
 
-        if (fileDialog.ShowDialog(Application.Current.MainWindow) != CommonFileDialogResult.Ok)
+        if (fileDialog.ShowDialog(Application.Current.MainWindow) != true)
             return null;
 
-        var dirPath = fileDialog.FileName;
+        var dirPath = fileDialog.FolderName;
 
         _appSettings.LastUsedDir = dirPath;
 

@@ -149,7 +149,7 @@ public class FileOverviewLoader : IFileOverviewLoader
             var nacp = nacpItem.Nacp;
 
             var language = -1;
-            foreach (ref var applicationTitle in nacp.Title.Items)
+            foreach (ref var applicationTitle in nacp.Title)
             {
                 language++;
 
