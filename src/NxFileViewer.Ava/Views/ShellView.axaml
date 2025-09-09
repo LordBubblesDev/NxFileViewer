@@ -7,6 +7,8 @@
                      xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
                      xmlns:pi="https://github.com/projektanker/icons.avalonia"
                      xmlns:vm="clr-namespace:NxFileViewer.Ava.ViewModels"
+                     xmlns:models="clr-namespace:NxFileViewer.Ava.Models"
+                     xmlns:views="clr-namespace:NxFileViewer.Ava.Views"
                      mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
                      Width="850" Height="550"
                      x:Class="NxFileViewer.Ava.Views.ShellView"
@@ -32,6 +34,7 @@
             <NativeMenuItem Header="Options" IsVisible="{OnPlatform macOS=False, Default=True}">
                 <NativeMenu>
                     <NativeMenuItem Header="Settings"
+                                    Command="{Binding OpenSettingsCommand}"
                                     Gesture="Ctrl+Alt+S" />
                 </NativeMenu>
             </NativeMenuItem>
@@ -43,18 +46,24 @@
 
         <Grid Grid.Row="1">
             <ui:TabView Name="MainTabView"
+                        IsVisible="{Binding Documents.Count}"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         CanDragTabs="True"
                         CanReorderTabs="True"
+                        SelectedItem="{Binding CurrentDocument}"
+                        TabItems="{Binding Documents}"
                         TabWidthMode="SizeToContent">
                 <ui:TabView.TabItemTemplate>
-                    <!-- <DataTemplate x:DataType="{x:Type comp-models:Document}"> -->
-                    <!--     <ui:TabViewItem CloseRequested="TabItemCloseRequested" -->
-                    <!--                     Content="{Binding Content}" -->
-                    <!--                     Header="{Binding Header}" -->
-                    <!--                     IconSource="{Binding Icon}" /> -->
-                    <!-- </DataTemplate> -->
+                    <DataTemplate x:DataType="{x:Type models:Document}">
+                        <ui:TabViewItem CloseRequested="TabViewItem_OnCloseRequested"
+                                        Header="{Binding Title}"
+                                        Content="{Binding Content}">
+                            <ui:TabViewItem.IconSource>
+                                <ui:SymbolIconSource Symbol="{Binding Icon}" />
+                            </ui:TabViewItem.IconSource>
+                        </ui:TabViewItem>
+                    </DataTemplate>
                 </ui:TabView.TabItemTemplate>
             </ui:TabView>
         </Grid>

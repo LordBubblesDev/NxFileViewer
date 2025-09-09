@@ -1,6 +1,7 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:styling="clr-namespace:FluentAvalonia.Styling;assembly=FluentAvalonia"
+             xmlns:vm="clr-namespace:NxFileViewer.Ava.ViewModels"
              x:Class="NxFileViewer.Ava.App"
              RequestedThemeVariant="Default">
     <Application.Resources>
@@ -29,12 +30,14 @@
     
     <NativeMenu.Menu>
         <NativeMenu>
-            <NativeMenuItem Header="Settings" Gesture="Meta+," />
+            <NativeMenuItem Header="Settings" Gesture="Meta+,"
+                            Click="SettingsMenu_OnClick" />
         </NativeMenu>
     </NativeMenu.Menu>
     
     <Application.Styles>
         <styling:FluentAvaloniaTheme PreferUserAccentColor="True"
                                      PreferSystemTheme="True" />
+        <StyleInclude Source="avares://ConfigFactory.Avalonia/Themes/Fluent/ConfigFactory.Avalonia.axaml" />
     </Application.Styles>
 </Application>

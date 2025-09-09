@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using ConfigFactory.Avalonia.Helpers;
 using NxFileViewer.Ava.ViewModels;
 using NxFileViewer.Ava.Views;
 using NxFileViewer.Ava.Localization;
@@ -35,7 +36,18 @@ public class App : Application
         desktop.MainWindow = new ShellView {
             DataContext = new ShellViewModel(),
         };
+        
+        BrowserDialog.StorageProvider = desktop.MainWindow.StorageProvider;
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private void SettingsMenu_OnClick(object? sender, EventArgs e)
+    {
+        if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime { MainWindow.DataContext: ShellViewModel vm }) {
+            return;
+        }
+
+        vm.OpenSettings();
     }
 }
