@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibHac.NSZ.Test", "LibHac.N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NxFileViewer.Ava", "NxFileViewer.Ava\NxFileViewer.Ava.csproj", "{C9366AC1-217E-418D-BCB5-7584EE241795}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NxFileViewer.Ava.LocaleGenerator", "NxFileViewer.Ava.LocaleGenerator\NxFileViewer.Ava.LocaleGenerator.csproj", "{1657B63D-B9E4-4DF5-99DA-1561881C0927}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 		{C9366AC1-217E-418D-BCB5-7584EE241795}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9366AC1-217E-418D-BCB5-7584EE241795}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9366AC1-217E-418D-BCB5-7584EE241795}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1657B63D-B9E4-4DF5-99DA-1561881C0927}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1657B63D-B9E4-4DF5-99DA-1561881C0927}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1657B63D-B9E4-4DF5-99DA-1561881C0927}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1657B63D-B9E4-4DF5-99DA-1561881C0927}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

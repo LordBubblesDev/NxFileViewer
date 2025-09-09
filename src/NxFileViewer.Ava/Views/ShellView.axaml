@@ -1,9 +1,83 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="NxFileViewer.Ava.Views.ShellView"
-        Title="ShellView">
-    Welcome to Avalonia!
-</Window>
+<windowing:AppWindow xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                     xmlns:windowing="clr-namespace:FluentAvalonia.UI.Windowing;assembly=FluentAvalonia"
+                     xmlns:ava="clr-namespace:NxFileViewer.Ava"
+                     xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                     xmlns:pi="https://github.com/projektanker/icons.avalonia"
+                     xmlns:vm="clr-namespace:NxFileViewer.Ava.ViewModels"
+                     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+                     Width="850" Height="550"
+                     x:Class="NxFileViewer.Ava.Views.ShellView"
+                     x:DataType="vm:ShellViewModel"
+                     Title="{x:Static ava:App.Title}">
+    <NativeMenu.Menu>
+        <NativeMenu>
+            <NativeMenuItem Header="File">
+                <NativeMenu>
+                    <NativeMenuItem Header="Open" Gesture="{OnPlatform macOS='Meta+O', Default='Ctrl+O'}" />
+                    <NativeMenuItem Header="Open Previous" Gesture="{OnPlatform macOS='Meta+Shift+O', Default='Ctrl+Shift+O'}" />
+                    <NativeMenuItem Header="Close" Gesture="{OnPlatform macOS='Meta+Q', Default='Ctrl+Q'}" />
+                    <NativeMenuItem Header="Exit" Gesture="Alt+F4" />
+                </NativeMenu>
+            </NativeMenuItem>
+            <NativeMenuItem Header="Tools">
+                <NativeMenu>
+                    <NativeMenuItem Header="Check Integrity" Gesture="F5" />
+                    <NativeMenuItem Header="Reload Keys" Gesture="F10" />
+                    <NativeMenuItem Header="Open Title Web Page" Gesture="F9" />
+                </NativeMenu>
+            </NativeMenuItem>
+            <NativeMenuItem Header="Options" IsVisible="{OnPlatform macOS=False, Default=True}">
+                <NativeMenu>
+                    <NativeMenuItem Header="Settings"
+                                    Gesture="Ctrl+Alt+S" />
+                </NativeMenu>
+            </NativeMenuItem>
+        </NativeMenu>
+    </NativeMenu.Menu>
+    
+    <Grid RowDefinitions="Auto,*,25">
+        <NativeMenuBar />
+
+        <Grid Grid.Row="1">
+            <ui:TabView Name="MainTabView"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        CanDragTabs="True"
+                        CanReorderTabs="True"
+                        TabWidthMode="SizeToContent">
+                <ui:TabView.TabItemTemplate>
+                    <!-- <DataTemplate x:DataType="{x:Type comp-models:Document}"> -->
+                    <!--     <ui:TabViewItem CloseRequested="TabItemCloseRequested" -->
+                    <!--                     Content="{Binding Content}" -->
+                    <!--                     Header="{Binding Header}" -->
+                    <!--                     IconSource="{Binding Icon}" /> -->
+                    <!-- </DataTemplate> -->
+                </ui:TabView.TabItemTemplate>
+            </ui:TabView>
+        </Grid>
+
+        <Grid Grid.Row="2"
+              ColumnDefinitions="Auto,Auto,*,Auto,Auto"
+              IsHitTestVisible="False">
+            <Border Grid.ColumnSpan="5" Background="{DynamicResource SystemAccentColor}" />
+            <pi:Icon Margin="5,0" Value="{Binding Icon, Source={x:Static ava:AppStatus.Shared}}" />
+            <TextBlock Grid.Column="1"
+                       Margin="5,0"
+                       VerticalAlignment="Center"
+                       FontFamily="{StaticResource UbuntuMono}"
+                       Text="{Binding Status, Source={x:Static ava:AppStatus.Shared}}" />
+            <TextBlock Grid.Column="3"
+                       Margin="5,0"
+                       VerticalAlignment="Center"
+                       FontFamily="{StaticResource UbuntuMono}"
+                       FontSize="12">
+                <Run Text="{x:Static ava:App.Title}" />
+                <Run Text=" |" />
+                <Run Text="{Binding Source={x:Static ava:App.Version}, StringFormat=' v{0}'}" />
+            </TextBlock>
+        </Grid>
+    </Grid>
+</windowing:AppWindow>

@@ -1,5 +1,6 @@
 ﻿using Avalonia;
-using System;
+using Projektanker.Icons.Avalonia;
+using Projektanker.Icons.Avalonia.FontAwesome;
 
 namespace NxFileViewer.Ava;
 
@@ -14,8 +15,13 @@ internal sealed class Program
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
+    {
+        IconProvider.Current
+            .Register(new FontAwesomeIconProvider(new FontAwesomeFreeUtf8JsonStreamProvider()));
+        
+        return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace();
+    }
 }
