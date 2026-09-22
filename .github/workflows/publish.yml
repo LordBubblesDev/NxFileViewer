@@ -12,6 +12,23 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - name: Windows and Linux
+            script: Publish-Avalonia.sh
+            artifact: NxFileViewer-win-linux
+            files: Publish/*.zip
+          - name: Linux AppImages
+            script: Publish-Avalonia-appimage.sh
+            artifact: NxFileViewer-appimage
+            files: Publish/*.AppImage
+          - name: macOS
+            script: Publish-Avalonia-macos.sh
+            artifact: NxFileViewer-macos
+            files: Publish/*.dmg
+    name: Publish ${{ matrix.target.name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,32 +49,30 @@ jobs:
           echo "VERSION=${v}" >> "$GITHUB_ENV"
           echo "Using version ${v}"
 
-      - name: Publish Windows and Linux
-        run: sh ./Publish-Avalonia.sh
-
-      - name: Publish Linux AppImages
-        run: sh ./Publish-Avalonia-appimage.sh
-
-      - name: Publish macOS
-        run: sh ./Publish-Avalonia-macos.sh
+      - name: Publish ${{ matrix.target.name }}
+        run: sh ./${{ matrix.target.script }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: NxFileViewer
-          path: |
-            Publish/*.zip
-            Publish/*.dmg
-            Publish/*.AppImage
+          name: ${{ matrix.target.artifact }}
+          path: ${{ matrix.target.files }}
           if-no-files-found: error
 
+  release:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
       - name: Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            Publish/*.zip
-            Publish/*.dmg
-            Publish/*.AppImage
+          files: dist/*
           generate_release_notes: true
           fail_on_unmatched_files: true
