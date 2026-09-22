@@ -1,6 +1,6 @@
 # NxFileViewer
 
-This is a fork of NxFileViewer with a reworked / rewritten UI in Avalonia, meant to make this application cross-platform compatible for Windows, Linux and macOS.
+This is a fork of NxFileViewer with UI rewritten in Avalonia, meant to make this application cross-platform compatible for Windows, Linux and macOS.
 
 ## Description
 
@@ -77,7 +77,7 @@ sh ./Publish-Avalonia-macos.sh
 
 ## Credits
 
-- Special thanks to [Arch Leaders](https://github.com/ArchLeaders) for starting baseline work to port NxFileViewer to Avalonia.
+- Special thanks to [Arch Leaders](https://github.com/ArchLeaders) for startin the baseline work to port NxFileViewer to Avalonia.
 - Special thanks to [TKMM](https://github.com/TKMM-Team/Tkmm) from which the design is inspired.
 - Special thanks to [Myster-Tee](https://github.com/Myster-Tee) for the original [NxFileViewer](https://github.com/Myster-Tee/NxFileViewer) from which most of the code was used to make this Avalonia version.
 - Special thanks to [Thealexbarney](https://github.com/Thealexbarney) for his powerful and easy to use [LibHac](https://github.com/Thealexbarney/LibHac) library.
