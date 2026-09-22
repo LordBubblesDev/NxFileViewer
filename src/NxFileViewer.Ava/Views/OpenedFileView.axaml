@@ -5,66 +5,13 @@
              xmlns:vm="clr-namespace:NxFileViewer.Ava.ViewModels"
              xmlns:views="clr-namespace:NxFileViewer.Ava.Views"
              xmlns:pi="https://github.com/projektanker/icons.avalonia"
+             xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
              xmlns:loc="clr-namespace:NxFileViewer.Ava.Localization"
              mc:Ignorable="d" d:DesignWidth="850" d:DesignHeight="550"
              x:Class="NxFileViewer.Ava.Views.OpenedFileView"
              x:DataType="vm:OpenedFileViewModel">
 
     <UserControl.Styles>
-        <Style Selector="TabControl.compact">
-            <Setter Property="Padding" Value="0" />
-        </Style>
-        <Style Selector="TabControl.compact /template/ ItemsPresenter#PART_ItemsPresenter">
-            <Setter Property="Margin" Value="4,2,4,0" />
-        </Style>
-        <Style Selector="TabControl.compact TabItem">
-            <Setter Property="FontSize" Value="12" />
-            <Setter Property="FontWeight" Value="Normal" />
-            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="ClipToBounds" Value="False" />
-            <Setter Property="MinHeight" Value="0" />
-            <Setter Property="Padding" Value="10,4,10,2" />
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Border x:Name="TabRoot"
-                            Background="{TemplateBinding Background}"
-                            CornerRadius="4,4,0,0"
-                            Padding="{TemplateBinding Padding}">
-                        <DockPanel>
-                            <Border x:Name="Underline"
-                                    DockPanel.Dock="Bottom"
-                                    Height="2"
-                                    Margin="0,3,0,0"
-                                    Background="{DynamicResource SystemAccentColorLight1}"
-                                    CornerRadius="1"
-                                    IsVisible="False" />
-                            <ContentPresenter Content="{TemplateBinding Header}"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center" />
-                        </DockPanel>
-                    </Border>
-                </ControlTemplate>
-            </Setter>
-        </Style>
-        <Style Selector="TabControl.compact TabItem:selected">
-            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-        </Style>
-        <Style Selector="TabControl.compact TabItem:selected /template/ Border#Underline">
-            <Setter Property="IsVisible" Value="True" />
-        </Style>
-        <Style Selector="TabControl.compact TabItem:pointerover /template/ Border#TabRoot">
-            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
-        </Style>
-        <Style Selector="TabControl.compact TabItem:selected:pointerover /template/ Border#TabRoot">
-            <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}" />
-        </Style>
-        <Style Selector="TabControl.compact TabStripItem">
-            <Setter Property="FontSize" Value="12" />
-            <Setter Property="MinHeight" Value="0" />
-            <Setter Property="Padding" Value="10,4,10,2" />
-        </Style>
         <Style Selector="TextBlock.fieldLabel">
             <Setter Property="Opacity" Value="0.65" />
             <Setter Property="FontSize" Value="11" />
@@ -122,10 +69,30 @@
         </Style>
     </UserControl.Styles>
 
-    <TabControl Classes="compact">
-        <!-- Overview tab -->
-        <TabItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[TabOverview]}">
-            <ScrollViewer>
+    <ui:NavigationView PaneDisplayMode="LeftCompact"
+                       IsSettingsVisible="False"
+                       IsBackButtonVisible="False"
+                       IsPaneToggleButtonVisible="True"
+                       CompactPaneLength="48"
+                       OpenPaneLength="160">
+        <ui:NavigationView.MenuItems>
+            <ui:NavigationViewItem Name="OverviewNav"
+                                   Content="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[TabOverview]}"
+                                   IsSelected="True">
+                <ui:NavigationViewItem.IconSource>
+                    <ui:SymbolIconSource Symbol="PreviewLink" />
+                </ui:NavigationViewItem.IconSource>
+            </ui:NavigationViewItem>
+            <ui:NavigationViewItem Name="ContentNav"
+                                   Content="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[TabContent]}">
+                <ui:NavigationViewItem.IconSource>
+                    <ui:SymbolIconSource Symbol="Folder" />
+                </ui:NavigationViewItem.IconSource>
+            </ui:NavigationViewItem>
+        </ui:NavigationView.MenuItems>
+
+        <Grid>
+            <ScrollViewer IsVisible="{Binding IsSelected, ElementName=OverviewNav}">
                 <StackPanel Margin="10" Spacing="8">
                     <!-- Integrity section -->
                     <Border Classes="section">
@@ -324,11 +291,10 @@
                     </ContentControl>
                 </StackPanel>
             </ScrollViewer>
-        </TabItem>
 
-        <!-- Content tab -->
-        <TabItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[TabContent]}">
-            <Grid ColumnDefinitions="*,4,320" Margin="8">
+            <Grid IsVisible="{Binding IsSelected, ElementName=ContentNav}"
+                  ColumnDefinitions="*,4,320"
+                  Margin="8">
                 <!-- Structure section -->
                 <Border Classes="section" Padding="0">
                     <DockPanel>
@@ -406,6 +372,6 @@
                     </DockPanel>
                 </Border>
             </Grid>
-        </TabItem>
-    </TabControl>
+        </Grid>
+    </ui:NavigationView>
 </UserControl>

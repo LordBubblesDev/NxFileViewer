@@ -10,7 +10,7 @@
                      xmlns:models="clr-namespace:NxFileViewer.Ava.Models"
                      xmlns:loc="clr-namespace:NxFileViewer.Ava.Localization"
                      mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-                     Width="850" Height="560"
+                     Width="850" Height="480"
                      x:Class="NxFileViewer.Ava.Views.ShellView"
                      x:DataType="vm:ShellViewModel"
                      Title="{x:Static ava:App.Title}"
