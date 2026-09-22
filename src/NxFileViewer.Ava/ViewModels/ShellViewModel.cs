@@ -16,8 +16,6 @@ namespace NxFileViewer.Ava.ViewModels;
 
 public partial class ShellViewModel : ObservableObject
 {
-    private static readonly SettingsViewModel settings = new();
-
     public ShellViewModel()
     {
         Documents.CollectionChanged += OnDocumentsChanged;
@@ -57,11 +55,13 @@ public partial class ShellViewModel : ObservableObject
     [RelayCommand]
     public void OpenSettings()
     {
-        if (Documents.IndexOf(settings) == -1) {
-            Documents.Add(settings);
+        var existing = Documents.OfType<SettingsViewModel>().FirstOrDefault();
+        if (existing == null) {
+            existing = new SettingsViewModel();
+            Documents.Add(existing);
         }
 
-        CurrentDocument = settings;
+        CurrentDocument = existing;
     }
 
     [RelayCommand]
