@@ -3,6 +3,7 @@
              xmlns:styling="clr-namespace:FluentAvalonia.Styling;assembly=FluentAvalonia"
              xmlns:loc="clr-namespace:NxFileViewer.Ava.Localization"
              x:Class="NxFileViewer.Ava.App"
+             Name="NX File Viewer"
              RequestedThemeVariant="Default">
     <!-- Resources -->
     <Application.Resources>

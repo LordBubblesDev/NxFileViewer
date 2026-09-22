@@ -1,5 +1,9 @@
 # NxFileViewer
 
+This is a fork of NxFileViewer with a reworked / rewritten UI in Avalonia, meant to make this application cross-platform for Windows, Linux and macOS.
+
+Special thanks to [Arch Leaders](https://github.com/ArchLeaders) for his original baseline work, and [TKMM](https://github.com/TKMM-Team/Tkmm) from which the design is inspired.
+
 ## Description
 
 View and browse content of Nintendo Switch files.
@@ -59,10 +63,16 @@ If you want this app in your language, send me your translations ;).
 
 ### Publishing
 
-Run the PowerShell script below.
+Windows and Linux:
 
-```PowerShell
-.\Publish.ps1
+```sh
+sh ./Publish-win-linux.sh
+```
+
+macOS:
+
+```sh
+sh ./Publish-macos.sh
 ```
 
 ## Credits

@@ -1,0 +1,58 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "*"
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Resolve version from tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          v="${GITHUB_REF_NAME}"
+          v="${v#v}"
+          if [ -z "$v" ]; then
+            exit 1
+          fi
+          echo "VERSION=${v}" >> "$GITHUB_ENV"
+          echo "Using version ${v}"
+
+      - name: Publish Windows and Linux
+        run: sh ./Publish-Avalonia.sh
+
+      - name: Publish macOS
+        run: sh ./Publish-Avalonia-macos.sh
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: NxFileViewer
+          path: |
+            Publish/*.zip
+            Publish/*.dmg
+          if-no-files-found: error
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            Publish/*.zip
+            Publish/*.dmg
+          generate_release_notes: true
+          fail_on_unmatched_files: true
