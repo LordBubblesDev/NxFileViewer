@@ -15,6 +15,22 @@
                      x:DataType="vm:ShellViewModel"
                      Title="{x:Static ava:App.Title}"
                      DragDrop.AllowDrop="True">
+    <windowing:AppWindow.Styles>
+        <Style Selector="NativeMenuBar">
+            <Setter Property="Height" Value="28" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        <Style Selector="NativeMenuBar Menu">
+            <Setter Property="Height" Value="28" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style Selector="NativeMenuBar MenuItem">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="MinHeight" Value="24" />
+            <Setter Property="Padding" Value="8,2" />
+        </Style>
+    </windowing:AppWindow.Styles>
     <!-- Key bindings -->
     <windowing:AppWindow.KeyBindings>
         <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenFileCommand}" />
@@ -71,7 +87,18 @@
     </NativeMenu.Menu>
     
     <Grid RowDefinitions="Auto,*,25">
-        <NativeMenuBar />
+        <Grid Height="28"
+              ClipToBounds="True"
+              Background="Transparent"
+              ColumnDefinitions="Auto,*"
+              IsVisible="{OnPlatform macOS=False, Default=True}">
+            <Image Width="16"
+                   Height="16"
+                   Margin="8,0,4,0"
+                   VerticalAlignment="Center"
+                   Source="avares://NxFileViewer.Ava/Assets/icon.ico" />
+            <NativeMenuBar Grid.Column="1" VerticalAlignment="Center" />
+        </Grid>
 
         <!-- Empty state -->
         <Grid Grid.Row="1">

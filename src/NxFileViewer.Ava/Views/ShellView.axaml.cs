@@ -17,6 +17,11 @@ public partial class ShellView : AppWindow
     {
         InitializeComponent();
 
+        if (!OperatingSystem.IsMacOS()) {
+            TitleBar.ExtendsContentIntoTitleBar = true;
+            TitleBar.TitleBarHitTestType = TitleBarHitTestType.Complex;
+        }
+
         Bitmap bitmap = new(AssetLoader.Open(new Uri("avares://NxFileViewer.Ava/Assets/icon.ico")));
         Icon = bitmap.CreateScaledBitmap(new PixelSize(48, 48));
 
@@ -24,7 +29,7 @@ public partial class ShellView : AppWindow
         AddHandler(DragDrop.DropEvent, OnDrop);
     }
 
-    private void OnDragOver(object? sender, DragEventArgs e)
+    private static void OnDragOver(object? sender, DragEventArgs e)
     {
         if (!e.Data.Contains(DataFormats.Files)) {
             return;
