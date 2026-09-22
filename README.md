@@ -63,16 +63,22 @@ If you want this app in your language, send me your translations ;).
 
 ### Publishing
 
-Windows and Linux:
+Windows and Linux zips:
 
 ```sh
-sh ./Publish-win-linux.sh
+sh ./Publish-Avalonia.sh
+```
+
+Linux AppImages:
+
+```sh
+sh ./Publish-Avalonia-appimage.sh
 ```
 
 macOS:
 
 ```sh
-sh ./Publish-macos.sh
+sh ./Publish-Avalonia-macos.sh
 ```
 
 ## Credits

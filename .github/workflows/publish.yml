@@ -35,6 +35,9 @@ jobs:
       - name: Publish Windows and Linux
         run: sh ./Publish-Avalonia.sh
 
+      - name: Publish Linux AppImages
+        run: sh ./Publish-Avalonia-appimage.sh
+
       - name: Publish macOS
         run: sh ./Publish-Avalonia-macos.sh
 
@@ -45,6 +48,7 @@ jobs:
           path: |
             Publish/*.zip
             Publish/*.dmg
+            Publish/*.AppImage
           if-no-files-found: error
 
       - name: Create GitHub Release
@@ -54,5 +58,6 @@ jobs:
           files: |
             Publish/*.zip
             Publish/*.dmg
+            Publish/*.AppImage
           generate_release_notes: true
           fail_on_unmatched_files: true
