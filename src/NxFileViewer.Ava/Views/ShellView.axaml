@@ -75,12 +75,11 @@
                                     Gesture="F9" />
                 </NativeMenu>
             </NativeMenuItem>
-            <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_Options]}"
-                            IsVisible="{OnPlatform macOS=False, Default=True}">
+            <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_Options]}">
                 <NativeMenu>
                     <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_Settings]}"
                                     Command="{Binding OpenSettingsCommand}"
-                                    Gesture="Ctrl+Alt+S" />
+                                    Gesture="{OnPlatform macOS='Meta+,', Default='Ctrl+Alt+S'}" />
                 </NativeMenu>
             </NativeMenuItem>
         </NativeMenu>

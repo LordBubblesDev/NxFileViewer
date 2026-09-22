@@ -131,24 +131,6 @@ write_plist() {
     <true/>
     <key>NSHumanReadableCopyright</key>
     <string>Copyright © NX File Viewer</string>
-    <key>CFBundleDocumentTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleTypeExtensions</key>
-            <array>
-                <string>nsp</string>
-                <string>nsz</string>
-                <string>xci</string>
-                <string>xcz</string>
-            </array>
-            <key>CFBundleTypeName</key>
-            <string>Nintendo Switch File</string>
-            <key>CFBundleTypeRole</key>
-            <string>Viewer</string>
-            <key>LSHandlerRank</key>
-            <string>Default</string>
-        </dict>
-    </array>
 </dict>
 </plist>
 EOF
