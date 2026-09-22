@@ -5,12 +5,14 @@ cd "$(dirname "$0")"
 ROOT="$(pwd)"
 
 APP_NAME="NxFileViewer"
+LONG_APP_NAME="NX File Viewer"
 HOST_NAME="NxFileViewer.Ava"
 PROJECT="src/NxFileViewer.Ava/NxFileViewer.Ava.csproj"
-OUT_DIR="Publish"
+AUTHOR_NAME="Myster-Tee (2019-2025), Lord Bubbles (2026-present)"
 ICNS_PATH="src/Resources/Icon.icns"
 RCODESIGN_VERSION="${RCODESIGN_VERSION:-0.29.0}"
 PREFIX="${PREFIX:-/usr/local}"
+OUT_DIR="Publish"
 
 if [ -z "${VERSION:-}" ]; then
     VERSION="$(sed -n 's/.*<Version>\([^<]*\)<\/Version>.*/\1/p' "$PROJECT" | head -n 1)"
@@ -110,9 +112,9 @@ write_plist() {
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>NX File Viewer</string>
+    <string>${LONG_APP_NAME}</string>
     <key>CFBundleDisplayName</key>
-    <string>NX File Viewer</string>
+    <string>${LONG_APP_NAME}</string>
     <key>CFBundleIconFile</key>
     <string>${APP_NAME}.icns</string>
     <key>CFBundlePackageType</key>
@@ -130,7 +132,7 @@ write_plist() {
     <key>NSHighResolutionCapable</key>
     <true/>
     <key>NSHumanReadableCopyright</key>
-    <string>Copyright © NX File Viewer</string>
+    <string>Copyright © ${AUTHOR_NAME}</string>
 </dict>
 </plist>
 EOF
