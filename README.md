@@ -1,14 +1,12 @@
 # NxFileViewer
 
-This is a fork of NxFileViewer with a reworked / rewritten UI in Avalonia, meant to make this application cross-platform for Windows, Linux and macOS.
-
-Special thanks to [Arch Leaders](https://github.com/ArchLeaders) for his original baseline work, and [TKMM](https://github.com/TKMM-Team/Tkmm) from which the design is inspired.
+This is a fork of NxFileViewer with a reworked / rewritten UI in Avalonia, meant to make this application cross-platform compatible for Windows, Linux and macOS.
 
 ## Description
 
 View and browse content of Nintendo Switch files.
 
-Download latest version [here](https://github.com/Myster-Tee/NxFileViewer/releases).
+Download latest version [here](https://github.com/LordBubblesDev/NxFileViewer/releases).
 
 ## Features
 
@@ -37,11 +35,7 @@ Download latest version [here](https://github.com/Myster-Tee/NxFileViewer/releas
 ## Screenshots
 
 ![Overview](./screenshots/Overview.png)
-
 ![Content](./screenshots/Content.png)
-
-![Content](./screenshots/Rename.png)
-
 ![Settings](./screenshots/Settings.png)
 
 ## Requirements
@@ -83,6 +77,9 @@ sh ./Publish-Avalonia-macos.sh
 
 ## Credits
 
+- Special thanks to [Arch Leaders](https://github.com/ArchLeaders) for starting baseline work to port NxFileViewer to Avalonia.
+- Special thanks to [TKMM](https://github.com/TKMM-Team/Tkmm) from which the design is inspired.
+- Special thanks to [Myster-Tee](https://github.com/Myster-Tee) for the original [NxFileViewer](https://github.com/Myster-Tee/NxFileViewer) from which most of the code was used to make this Avalonia version.
 - Special thanks to [Thealexbarney](https://github.com/Thealexbarney) for his powerful and easy to use [LibHac](https://github.com/Thealexbarney/LibHac) library.
-- Special thanks to [nicoboss](https://github.com/nicoboss/) who took a lot of time to explain me the [NSZ](https://github.com/nicoboss/nsz) format and many other things.
+- Special thanks to [nicoboss](https://github.com/nicoboss/) who took a lot of time to explain the [NSZ](https://github.com/nicoboss/nsz) format and many other things.
 - Thanks to all the Switch scene :)
