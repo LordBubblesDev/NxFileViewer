@@ -18,7 +18,6 @@ Download latest version [here](https://github.com/LordBubblesDev/NxFileViewer/re
 - Save or copy title images
 - Specify your own keys location
 - Searches keys in commonly used locations
-- Automatically download keys from an URL defined in the settings
 - Supports drag and drop
 - Checks real files type (XCI or NSP)
 - Detailed log
@@ -28,8 +27,7 @@ Download latest version [here](https://github.com/LordBubblesDev/NxFileViewer/re
 - Verify integrity (hash and signature)
 - Displays missing keys
 - Opens title URL
-- Multiple languages (actually English and French, PR me for more ;))
-- Advanced files renaming
+- Multiple languages
 - Full support of NSZ and XCZ files (compressed with [NSZ](https://github.com/nicoboss/nsz/) tool from **nicoboss**).
 
 ## Screenshots
@@ -38,22 +36,18 @@ Download latest version [here](https://github.com/LordBubblesDev/NxFileViewer/re
 ![Content](./screenshots/Content.png)
 ![Settings](./screenshots/Settings.png)
 
-## Requirements
-
-If application doesn't start, please install the *.NET Desktop Runtime 8* which can be downloaded from the official Microsoft website [here](https://dotnet.microsoft.com/download/dotnet/8.0).
-
 ## Contribute
 
 Feel free to contribute to this project to make this program better.
 
-I designed the application so that it can be easily localized in several languages.  
-If you want this app in your language, send me your translations ;).
+The application can be easily localized in several languages.  
+If you want this app in your language, send your translations ;)
 
 ## Development
 
 ### Requirements
 
- - Microsoft Visual Studio 2022+
+ - [.NET SDK 10.0](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 
 ### Publishing
 
