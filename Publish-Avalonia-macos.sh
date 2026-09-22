@@ -193,27 +193,40 @@ create_dmg() {
     mkfs.hfsplus -v "$volume_name" "$uncompressed"
 
     stage_full="$(cd "$stage" && pwd)"
-    find "$stage" -mindepth 1 -type d | sort | while IFS= read -r src; do
+    uncompressed_full="$(cd "$(dirname "$uncompressed")" && pwd)/$(basename "$uncompressed")"
+    dir_list="${uncompressed_full}.dirs"
+    file_list="${uncompressed_full}.files"
+    find "$stage_full" -mindepth 1 -type d | sort > "$dir_list"
+    find "$stage_full" -mindepth 1 -type f > "$file_list"
+
+    while IFS= read -r src; do
         rel="${src#"$stage_full"/}"
-        dmg-hfsplus "$uncompressed" mkdir "/$rel"
-    done
-    find "$stage" -mindepth 1 -type f | while IFS= read -r src; do
+        dmg-hfsplus "$uncompressed_full" mkdir "/$rel"
+    done < "$dir_list"
+
+    added=0
+    host_rel="${APP_NAME}.app/Contents/MacOS/${APP_NAME}"
+    while IFS= read -r src; do
         rel="${src#"$stage_full"/}"
-        dmg-hfsplus "$uncompressed" add "$src" "/$rel"
-        if [ "$rel" = "${APP_NAME}.app/Contents/MacOS/${APP_NAME}" ]; then
-            dmg-hfsplus "$uncompressed" chmod 0755 "/$rel"
+        dmg-hfsplus "$uncompressed_full" add "$src" "/$rel"
+        if [ "$rel" = "$host_rel" ]; then
+            dmg-hfsplus "$uncompressed_full" chmod 0755 "/$rel"
         fi
-    done
+        added=$((added + 1))
+    done < "$file_list"
+
+    echo "Added ${added} files to the HFS image."
+    rm -f "$dir_list" "$file_list"
 
     link_stage="${OUT_DIR}/${volume_name}_dmglink"
     rm -rf "$link_stage"
     mkdir -p "$link_stage"
     ln -s /Applications "${link_stage}/Applications"
-    dmg-hfsplus "$uncompressed" -s clone_link addall "$link_stage" /
+    dmg-hfsplus "$uncompressed_full" -s clone_link addall "$link_stage" /
     rm -rf "$link_stage"
 
-    dmg dmg -c zlib "$uncompressed" "$dmg_path"
-    rm -f "$uncompressed"
+    dmg dmg -c zlib "$uncompressed_full" "$dmg_path"
+    rm -f "$uncompressed_full"
     rm -rf "$stage"
     sign_bundle "$dmg_path"
 }
