@@ -31,7 +31,7 @@ have() {
 install_linux_deps() {
     echo "Installing macOS packaging tools..."
     sudo apt-get update
-    sudo apt-get install -y cmake g++ make zlib1g-dev hfsprogs curl ca-certificates git zip
+    sudo apt-get install -y cmake g++ make zlib1g-dev libbz2-dev hfsprogs curl ca-certificates git zip
 
     arch="$(uname -m)"
     case "$arch" in
