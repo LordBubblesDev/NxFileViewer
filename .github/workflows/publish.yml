@@ -27,7 +27,9 @@ jobs:
           - name: macOS
             script: Publish-Avalonia-macos.sh
             artifact: NxFileViewer-macos
-            files: Publish/*.dmg
+            files: |
+              Publish/*.dmg
+              Publish/*.zip
     name: Publish ${{ matrix.target.name }}
     steps:
       - name: Checkout

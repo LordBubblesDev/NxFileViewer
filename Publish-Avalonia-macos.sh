@@ -71,7 +71,7 @@ install_linux_deps() {
 }
 
 ensure_deps() {
-   if have rcodesign && have dmg && have dmg-hfsplus && have mkfs.hfsplus; then
+   if have zip && have rcodesign && have dmg && have dmg-hfsplus && have mkfs.hfsplus; then
         return
     fi
 
@@ -136,6 +136,19 @@ write_plist() {
 EOF
 }
 
+create_appbundle() {
+    app_dir="$1"
+    zip_path="$2"
+
+    rm -f "$zip_path"
+
+    app_parent="$(cd "$(dirname "$app_dir")" && pwd)"
+    app_name="$(basename "$app_dir")"
+    zip_full="$(cd "$(dirname "$zip_path")" && pwd)/$(basename "$zip_path")"
+    echo "Writing ${app_name} zip."
+    (cd "$app_parent" && zip -r "$zip_full" "$app_name")
+}
+
 create_dmg() {
     app_dir="$1"
     dmg_path="$2"
@@ -165,7 +178,7 @@ create_dmg() {
         exit 1
     fi
 
-    echo "Creating DMG with libdmg-hfsplus."
+    echo "Writing DMG with libdmg-hfsplus."
     staging_size="$(find "$staged_app" -type f -exec stat -c%s {} + | awk '{s+=$1} END {print s}')"
     padding="$(( (staging_size * 15 + 50) / 100 + 5 * 1024 * 1024 ))"
     total_size="$((staging_size + padding))"
@@ -218,11 +231,12 @@ publish_osx() {
     release="${APP_NAME}_v${VERSION}_${rid}"
     publish_dir="${OUT_DIR}/${release}_build"
     app_dir="${OUT_DIR}/${APP_NAME}.app"
+    zip_path="${OUT_DIR}/${release}.zip"
     dmg_path="${OUT_DIR}/${release}.dmg"
 
     echo "============================================================================"
-    echo "> Publishing ${release}.dmg"
-    rm -rf "$publish_dir" "$app_dir" "$dmg_path"
+    echo "> Publishing ${release}.zip and ${release}.dmg"
+    rm -rf "$publish_dir" "$app_dir" "$zip_path" "$dmg_path"
 
     dotnet publish "$PROJECT" -c Release -r "$rid" --self-contained true \
         -p:Version="$VERSION" \
@@ -258,7 +272,11 @@ publish_osx() {
         exit 1
     fi
     cp "$ICNS_PATH" "${app_dir}/Contents/Resources/${APP_NAME}.icns"
+    find "$app_dir" -type d -exec chmod 0755 {} +
+    find "$app_dir" -type f -exec chmod 0644 {} +
+    chmod 0755 "${app_dir}/Contents/MacOS/${APP_NAME}"
     sign_bundle "$app_dir"
+    create_appbundle "$app_dir" "$zip_path"
     create_dmg "$app_dir" "$dmg_path" "$APP_NAME"
     rm -rf "$app_dir" "$publish_dir"
 }
