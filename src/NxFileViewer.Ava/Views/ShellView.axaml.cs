@@ -19,6 +19,7 @@ public partial class ShellView : FAAppWindow
 
         if (!OperatingSystem.IsMacOS()) {
             TitleBar.ExtendsContentIntoTitleBar = true;
+            ExtendClientAreaToDecorationsHint = true;
         }
 
         Bitmap bitmap = new(AssetLoader.Open(new Uri("avares://NxFileViewer.Ava/Assets/icon.ico")));

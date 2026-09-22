@@ -90,14 +90,17 @@
         <Grid Height="28"
               ClipToBounds="True"
               Background="Transparent"
-              ColumnDefinitions="Auto,*"
+              ColumnDefinitions="Auto,Auto,*"
+              WindowDecorationProperties.ElementRole="TitleBar"
               IsVisible="{OnPlatform macOS=False, Default=True}">
             <Image Width="16"
                    Height="16"
                    Margin="8,0,4,0"
                    VerticalAlignment="Center"
                    Source="avares://NxFileViewer.Ava/Assets/icon.ico" />
-            <NativeMenuBar Grid.Column="1" VerticalAlignment="Center" />
+            <NativeMenuBar Grid.Column="1"
+                           VerticalAlignment="Center"
+                           WindowDecorationProperties.ElementRole="User" />
         </Grid>
 
         <!-- Empty state -->
