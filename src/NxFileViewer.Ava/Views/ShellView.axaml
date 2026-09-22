@@ -1,4 +1,4 @@
-<windowing:AppWindow xmlns="https://github.com/avaloniaui"
+<windowing:FAAppWindow xmlns="https://github.com/avaloniaui"
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,12 +11,12 @@
                      xmlns:loc="clr-namespace:NxFileViewer.Ava.Localization"
                      mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
                      Width="850"
-                     Height="{OnPlatform macOS=450, Linux=510, Default=480}"
+                     Height="{OnPlatform macOS=480, Linux=540, Default=510}"
                      x:Class="NxFileViewer.Ava.Views.ShellView"
                      x:DataType="vm:ShellViewModel"
                      Title="{x:Static ava:App.Title}"
                      DragDrop.AllowDrop="True">
-    <windowing:AppWindow.Styles>
+    <windowing:FAAppWindow.Styles>
         <Style Selector="NativeMenuBar">
             <Setter Property="Height" Value="28" />
             <Setter Property="FontSize" Value="12" />
@@ -31,9 +31,9 @@
             <Setter Property="MinHeight" Value="24" />
             <Setter Property="Padding" Value="8,2" />
         </Style>
-    </windowing:AppWindow.Styles>
+    </windowing:FAAppWindow.Styles>
     <!-- Key bindings -->
-    <windowing:AppWindow.KeyBindings>
+    <windowing:FAAppWindow.KeyBindings>
         <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenFileCommand}" />
         <KeyBinding Gesture="Ctrl+Shift+O" Command="{Binding OpenPreviousCommand}" />
         <KeyBinding Gesture="Ctrl+Shift+C" Command="{Binding CloseCommand}" />
@@ -41,7 +41,7 @@
         <KeyBinding Gesture="F5" Command="{Binding CheckHashCommand}" />
         <KeyBinding Gesture="F10" Command="{Binding ReloadKeysCommand}" />
         <KeyBinding Gesture="F9" Command="{Binding OpenTitleWebPageCommand}" />
-    </windowing:AppWindow.KeyBindings>
+    </windowing:FAAppWindow.KeyBindings>
     <!-- Menu bar -->
     <NativeMenu.Menu>
         <NativeMenu>
@@ -119,28 +119,28 @@
             </StackPanel>
 
             <!-- Opened files -->
-            <ui:TabView Name="MainTabView"
-                        IsVisible="{Binding HasDocuments}"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        CanDragTabs="True"
-                        CanReorderTabs="True"
-                        AddTabButtonClick="MainTabView_OnAddTabButtonClick"
-                        SelectedItem="{Binding CurrentDocument, Mode=TwoWay}"
-                        TabItems="{Binding Documents}"
-                        TabWidthMode="SizeToContent">
-                <ui:TabView.TabItemTemplate>
+            <ui:FATabView Name="MainTabView"
+                          IsVisible="{Binding HasDocuments}"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          CanDragTabs="True"
+                          CanReorderTabs="True"
+                          AddTabButtonCommand="{Binding AddEmptyTabCommand}"
+                          SelectedItem="{Binding CurrentDocument, Mode=TwoWay}"
+                          TabItemsSource="{Binding Documents}"
+                          TabCloseRequested="MainTabView_OnTabCloseRequested"
+                          TabWidthMode="SizeToContent">
+                <ui:FATabView.TabItemTemplate>
                     <DataTemplate x:DataType="{x:Type models:Document}">
-                        <ui:TabViewItem CloseRequested="TabViewItem_OnCloseRequested"
-                                        Header="{Binding Title}"
-                                        Content="{Binding Content}">
-                            <ui:TabViewItem.IconSource>
-                                <ui:SymbolIconSource Symbol="{Binding Icon}" />
-                            </ui:TabViewItem.IconSource>
-                        </ui:TabViewItem>
+                        <ui:FATabViewItem Header="{Binding Title}"
+                                          Content="{Binding Content}">
+                            <ui:FATabViewItem.IconSource>
+                                <ui:FASymbolIconSource Symbol="{Binding Icon}" />
+                            </ui:FATabViewItem.IconSource>
+                        </ui:FATabViewItem>
                     </DataTemplate>
-                </ui:TabView.TabItemTemplate>
-            </ui:TabView>
+                </ui:FATabView.TabItemTemplate>
+            </ui:FATabView>
         </Grid>
 
         <!-- Status bar -->
@@ -167,4 +167,4 @@
             </TextBlock>
         </Grid>
     </Grid>
-</windowing:AppWindow>
+</windowing:FAAppWindow>

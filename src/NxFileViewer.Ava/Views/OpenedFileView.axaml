@@ -69,27 +69,27 @@
         </Style>
     </UserControl.Styles>
 
-    <ui:NavigationView PaneDisplayMode="LeftCompact"
+    <ui:FANavigationView PaneDisplayMode="LeftCompact"
                        IsSettingsVisible="False"
                        IsBackButtonVisible="False"
                        IsPaneToggleButtonVisible="True"
                        CompactPaneLength="48"
                        OpenPaneLength="160">
-        <ui:NavigationView.MenuItems>
-            <ui:NavigationViewItem Name="OverviewNav"
-                                   Content="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[TabOverview]}"
-                                   IsSelected="True">
-                <ui:NavigationViewItem.IconSource>
-                    <ui:SymbolIconSource Symbol="PreviewLink" />
-                </ui:NavigationViewItem.IconSource>
-            </ui:NavigationViewItem>
-            <ui:NavigationViewItem Name="ContentNav"
-                                   Content="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[TabContent]}">
-                <ui:NavigationViewItem.IconSource>
-                    <ui:SymbolIconSource Symbol="Folder" />
-                </ui:NavigationViewItem.IconSource>
-            </ui:NavigationViewItem>
-        </ui:NavigationView.MenuItems>
+        <ui:FANavigationView.MenuItems>
+            <ui:FANavigationViewItem Name="OverviewNav"
+                                     Content="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[TabOverview]}"
+                                     IsSelected="True">
+                <ui:FANavigationViewItem.IconSource>
+                    <ui:FASymbolIconSource Symbol="PreviewLink" />
+                </ui:FANavigationViewItem.IconSource>
+            </ui:FANavigationViewItem>
+            <ui:FANavigationViewItem Name="ContentNav"
+                                     Content="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[TabContent]}">
+                <ui:FANavigationViewItem.IconSource>
+                    <ui:FASymbolIconSource Symbol="Folder" />
+                </ui:FANavigationViewItem.IconSource>
+            </ui:FANavigationViewItem>
+        </ui:FANavigationView.MenuItems>
 
         <Grid>
             <ScrollViewer IsVisible="{Binding IsSelected, ElementName=OverviewNav}">
@@ -373,5 +373,5 @@
                 </Border>
             </Grid>
         </Grid>
-    </ui:NavigationView>
+    </ui:FANavigationView>
 </UserControl>

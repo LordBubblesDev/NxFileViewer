@@ -11,7 +11,7 @@ using NxFileViewer.Ava.ViewModels;
 
 namespace NxFileViewer.Ava.Views;
 
-public partial class ShellView : AppWindow
+public partial class ShellView : FAAppWindow
 {
     public ShellView()
     {
@@ -19,7 +19,6 @@ public partial class ShellView : AppWindow
 
         if (!OperatingSystem.IsMacOS()) {
             TitleBar.ExtendsContentIntoTitleBar = true;
-            TitleBar.TitleBarHitTestType = TitleBarHitTestType.Complex;
         }
 
         Bitmap bitmap = new(AssetLoader.Open(new Uri("avares://NxFileViewer.Ava/Assets/icon.ico")));
@@ -31,7 +30,7 @@ public partial class ShellView : AppWindow
 
     private static void OnDragOver(object? sender, DragEventArgs e)
     {
-        if (!e.Data.Contains(DataFormats.Files)) {
+        if (e.DataTransfer.Contains(DataFormat.File) != true) {
             return;
         }
 
@@ -41,11 +40,11 @@ public partial class ShellView : AppWindow
 
     private async void OnDrop(object? sender, DragEventArgs e)
     {
-        if (DataContext is not ShellViewModel vm || !e.Data.Contains(DataFormats.Files)) {
+        if (DataContext is not ShellViewModel vm || e.DataTransfer.Contains(DataFormat.File) != true) {
             return;
         }
 
-        var storageItems = e.Data.GetFiles();
+        var storageItems = e.DataTransfer.TryGetFiles();
         if (storageItems == null) {
             return;
         }
@@ -61,14 +60,7 @@ public partial class ShellView : AppWindow
         }
     }
 
-    private void MainTabView_OnAddTabButtonClick(TabView sender, EventArgs args)
-    {
-        if (DataContext is ShellViewModel vm) {
-            vm.AddEmptyTab();
-        }
-    }
-
-    private async void TabViewItem_OnCloseRequested(TabViewItem sender, TabViewTabCloseRequestedEventArgs args)
+    private async void MainTabView_OnTabCloseRequested(FATabView sender, FATabViewTabCloseRequestedEventArgs args)
     {
         try {
             if (DataContext is not ShellViewModel vm) {
@@ -80,7 +72,7 @@ public partial class ShellView : AppWindow
             }
         }
         catch (Exception ex) {
-            await new ContentDialog
+            await new FAContentDialog
             {
                 Title = ex.Message,
                 Content = ex.ToString(),

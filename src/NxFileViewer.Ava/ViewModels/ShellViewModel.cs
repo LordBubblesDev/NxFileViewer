@@ -43,7 +43,7 @@ public partial class ShellViewModel : ObservableObject
     public bool NoProdKeysLoaded => AppServices.Current.KeySetProvider.ActualProdKeysFilePath == null;
 
     [RelayCommand]
-    public void AddEmptyTab()
+    private void AddEmptyTab()
     {
         var empty = Documents.OfType<EmptyDocument>().FirstOrDefault();
         if (empty == null) {
@@ -222,7 +222,7 @@ public partial class ShellViewModel : ObservableObject
             CurrentDocument = document;
         }
         catch (Exception ex) {
-            await new ContentDialog
+            await new FAContentDialog
             {
                 Title = Locale[FvLocale.FailedToOpenFile],
                 Content = ex.Message,

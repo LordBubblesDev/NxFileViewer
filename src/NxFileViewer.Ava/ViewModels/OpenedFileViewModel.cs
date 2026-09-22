@@ -194,7 +194,7 @@ public partial class OpenedFileViewModel : ObservableObject, IDisposable
         }
 
         var message = string.Join(Environment.NewLine, SelectedItem.Errors.Select(error => error.Message));
-        await new ContentDialog
+        await new FAContentDialog
         {
             Title = Locale[FvLocale.ItemErrors_Title],
             Content = message,
@@ -497,10 +497,12 @@ public sealed partial class CnmtPackageViewModel : ObservableObject, IDisposable
 
         try {
             await using var stream = new MemoryStream();
-            icon.Save(stream);
-            var data = new DataObject();
-            data.Set("PNG", stream.ToArray());
-            await clipboard.SetDataObjectAsync(data);
+            icon.Save(stream, PngBitmapEncoderOptions.Default);
+            var item = new DataTransferItem();
+            item.Set(DataFormat.CreateBytesApplicationFormat("png"), stream.ToArray());
+            var transfer = new DataTransfer();
+            transfer.Add(item);
+            await clipboard.SetDataAsync(transfer);
             AppStatus.SetTemporaryShort(Locale[FvLocale.Status_IconCopied], "fa-regular fa-copy");
         }
         catch (Exception ex) {

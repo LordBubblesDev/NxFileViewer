@@ -10,7 +10,7 @@ namespace NxFileViewer.Ava.ViewModels;
 public sealed class EmptyDocument : Document
 {
     public EmptyDocument(ICommand openFileCommand)
-        : base(Locale[FvLocale.EmptyTab_Title], Symbol.OpenFile)
+        : base(Locale[FvLocale.EmptyTab_Title], FASymbol.OpenFile)
     {
         OpenFileCommand = openFileCommand;
         Content = CreateContent();

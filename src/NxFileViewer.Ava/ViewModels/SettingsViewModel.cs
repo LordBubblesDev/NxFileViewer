@@ -21,7 +21,7 @@ public class SettingsViewModel : Document
         context.Append<Config>();
     }
 
-    public SettingsViewModel() : base(Locale[FvLocale.SettingsView_Title], Symbol.Settings)
+    public SettingsViewModel() : base(Locale[FvLocale.SettingsView_Title], FASymbol.Settings)
     {
         Content = configPage;
     }

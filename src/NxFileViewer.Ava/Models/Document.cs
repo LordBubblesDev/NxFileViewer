@@ -9,7 +9,7 @@ public partial class Document : ObservableObject
     public partial string Title { get; set; }
 
     [ObservableProperty]
-    public partial Symbol Icon { get; set; }
+    public partial FASymbol Icon { get; set; }
 
     [ObservableProperty]
     public partial object? Content { get; set; }
@@ -19,7 +19,7 @@ public partial class Document : ObservableObject
         return Task.FromResult(true);
     }
 
-    protected Document(string title, Symbol icon = Symbol.Document)
+    protected Document(string title, FASymbol icon = FASymbol.Document)
     {
         Title = title;
         Icon = icon;
