@@ -8,32 +8,61 @@
                      xmlns:pi="https://github.com/projektanker/icons.avalonia"
                      xmlns:vm="clr-namespace:NxFileViewer.Ava.ViewModels"
                      xmlns:models="clr-namespace:NxFileViewer.Ava.Models"
-                     xmlns:views="clr-namespace:NxFileViewer.Ava.Views"
+                     xmlns:loc="clr-namespace:NxFileViewer.Ava.Localization"
                      mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-                     Width="850" Height="550"
+                     Width="850" Height="560"
                      x:Class="NxFileViewer.Ava.Views.ShellView"
                      x:DataType="vm:ShellViewModel"
-                     Title="{x:Static ava:App.Title}">
+                     Title="{x:Static ava:App.Title}"
+                     DragDrop.AllowDrop="True">
+    <!-- Key bindings -->
+    <windowing:AppWindow.KeyBindings>
+        <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenFileCommand}" />
+        <KeyBinding Gesture="Ctrl+Shift+O" Command="{Binding OpenPreviousCommand}" />
+        <KeyBinding Gesture="Ctrl+Shift+C" Command="{Binding CloseCommand}" />
+        <KeyBinding Gesture="Ctrl+Alt+S" Command="{Binding OpenSettingsCommand}" />
+        <KeyBinding Gesture="F5" Command="{Binding CheckHashCommand}" />
+        <KeyBinding Gesture="F10" Command="{Binding ReloadKeysCommand}" />
+        <KeyBinding Gesture="F9" Command="{Binding OpenTitleWebPageCommand}" />
+    </windowing:AppWindow.KeyBindings>
+    <!-- Menu bar -->
     <NativeMenu.Menu>
         <NativeMenu>
-            <NativeMenuItem Header="File">
+            <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_File]}">
                 <NativeMenu>
-                    <NativeMenuItem Header="Open" Gesture="{OnPlatform macOS='Meta+O', Default='Ctrl+O'}" />
-                    <NativeMenuItem Header="Open Previous" Gesture="{OnPlatform macOS='Meta+Shift+O', Default='Ctrl+Shift+O'}" />
-                    <NativeMenuItem Header="Close" Gesture="{OnPlatform macOS='Meta+Q', Default='Ctrl+Q'}" />
-                    <NativeMenuItem Header="Exit" Gesture="Alt+F4" />
+                    <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_Open]}"
+                                    Command="{Binding OpenFileCommand}"
+                                    Gesture="{OnPlatform macOS='Meta+O', Default='Ctrl+O'}" />
+                    <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_OpenLast]}"
+                                    Command="{Binding OpenPreviousCommand}"
+                                    Gesture="{OnPlatform macOS='Meta+Shift+O', Default='Ctrl+Shift+O'}" />
+                    <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_Close]}"
+                                    Command="{Binding CloseCommand}"
+                                    Gesture="{OnPlatform macOS='Meta+Shift+W', Default='Ctrl+Shift+C'}" />
+                    <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_Exit]}"
+                                    Command="{Binding ExitCommand}"
+                                    Gesture="Alt+F4" />
                 </NativeMenu>
             </NativeMenuItem>
-            <NativeMenuItem Header="Tools">
+            <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_Tools]}">
                 <NativeMenu>
-                    <NativeMenuItem Header="Check Integrity" Gesture="F5" />
-                    <NativeMenuItem Header="Reload Keys" Gesture="F10" />
-                    <NativeMenuItem Header="Open Title Web Page" Gesture="F9" />
+                    <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_CheckSignature]}"
+                                    Command="{Binding CheckSignatureCommand}" />
+                    <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_CheckHash]}"
+                                    Command="{Binding CheckHashCommand}"
+                                    Gesture="F5" />
+                    <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_ReloadKeys]}"
+                                    Command="{Binding ReloadKeysCommand}"
+                                    Gesture="F10" />
+                    <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_OpenTitleWebPage]}"
+                                    Command="{Binding OpenTitleWebPageCommand}"
+                                    Gesture="F9" />
                 </NativeMenu>
             </NativeMenuItem>
-            <NativeMenuItem Header="Options" IsVisible="{OnPlatform macOS=False, Default=True}">
+            <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_Options]}"
+                            IsVisible="{OnPlatform macOS=False, Default=True}">
                 <NativeMenu>
-                    <NativeMenuItem Header="Settings"
+                    <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_Settings]}"
                                     Command="{Binding OpenSettingsCommand}"
                                     Gesture="Ctrl+Alt+S" />
                 </NativeMenu>
@@ -44,13 +73,32 @@
     <Grid RowDefinitions="Auto,*,25">
         <NativeMenuBar />
 
+        <!-- Empty state -->
         <Grid Grid.Row="1">
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        IsVisible="{Binding !HasDocuments}"
+                        Spacing="8">
+                <TextBlock HorizontalAlignment="Center"
+                           Opacity="0.7"
+                           FontSize="16"
+                           Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[DragMeAFile]}" />
+                <Button HorizontalAlignment="Center"
+                        Command="{Binding OpenSettingsCommand}"
+                        IsVisible="{Binding NoProdKeysLoaded}">
+                    <TextBlock Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                               Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[WarnNoProdKeysFileFound]}" />
+                </Button>
+            </StackPanel>
+
+            <!-- Opened files -->
             <ui:TabView Name="MainTabView"
-                        IsVisible="{Binding Documents.Count}"
+                        IsVisible="{Binding HasDocuments}"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         CanDragTabs="True"
                         CanReorderTabs="True"
+                        AddTabButtonClick="MainTabView_OnAddTabButtonClick"
                         SelectedItem="{Binding CurrentDocument}"
                         TabItems="{Binding Documents}"
                         TabWidthMode="SizeToContent">
@@ -68,6 +116,7 @@
             </ui:TabView>
         </Grid>
 
+        <!-- Status bar -->
         <Grid Grid.Row="2"
               ColumnDefinitions="Auto,Auto,*,Auto,Auto"
               IsHitTestVisible="False">
@@ -76,8 +125,10 @@
             <TextBlock Grid.Column="1"
                        Margin="5,0"
                        VerticalAlignment="Center"
-                       FontFamily="{StaticResource UbuntuMono}"
-                       Text="{Binding Status, Source={x:Static ava:AppStatus.Shared}}" />
+                       FontFamily="{StaticResource UbuntuMono}">
+                <Run Text="{Binding Status, Source={x:Static ava:AppStatus.Shared}}" />
+                <Run Text="{Binding Suffix, Source={x:Static ava:AppStatus.Shared}}" />
+            </TextBlock>
             <TextBlock Grid.Column="3"
                        Margin="5,0"
                        VerticalAlignment="Center"

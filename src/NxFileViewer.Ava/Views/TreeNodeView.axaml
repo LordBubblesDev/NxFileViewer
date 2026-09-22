@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:NxFileViewer.Ava.ViewModels"
+             xmlns:views="clr-namespace:NxFileViewer.Ava.Views"
+             x:Class="NxFileViewer.Ava.Views.TreeNodeView"
+             x:DataType="vm:TreeNodeViewModel">
+    <!-- Styles -->
+    <UserControl.Styles>
+        <Style Selector="Border.treeRow">
+            <Setter Property="Padding" Value="4,2" />
+            <Setter Property="CornerRadius" Value="3" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="Border.treeRow:pointerover">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+        </Style>
+        <Style Selector="Border.treeRow.selected">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+        </Style>
+        <Style Selector="Button.expander">
+            <Setter Property="Width" Value="18" />
+            <Setter Property="MinWidth" Value="18" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+    </UserControl.Styles>
+
+    <StackPanel>
+        <!-- Row -->
+        <Border x:Name="RowBorder"
+                Classes="treeRow"
+                Classes.selected="{Binding IsSelected}">
+            <Grid ColumnDefinitions="18,*">
+                <Button Classes="expander"
+                        Command="{Binding ToggleExpandCommand}"
+                        IsVisible="{Binding HasChildren}"
+                        Content="{Binding ExpanderGlyph}" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                    <TextBlock Text="{Binding DisplayName}" />
+                    <TextBlock Opacity="0.55" Text="{Binding Format}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+        <!-- Children -->
+        <ItemsControl x:Name="ChildItems"
+                      Margin="16,0,0,0"
+                      IsVisible="{Binding IsExpanded}"
+                      ItemsSource="{Binding Children}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:TreeNodeViewModel">
+                    <views:TreeNodeView />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
+</UserControl>

@@ -2,24 +2,27 @@
 using ConfigFactory.Avalonia;
 using ConfigFactory.Models;
 using FluentAvalonia.UI.Controls;
+using NxFileViewer.Ava.Localization;
 using NxFileViewer.Ava.Models;
 
 namespace NxFileViewer.Ava.ViewModels;
 
-public partial class SettingsViewModel : Document
+public class SettingsViewModel : Document
 {
-    private static readonly ConfigPage _configPage = new();
+    private static readonly ConfigPage configPage = new();
 
     static SettingsViewModel()
     {
-        if (_configPage.DataContext is ConfigPageModel context) {
-            context.SecondaryButtonIsEnabled = false;
-            context.Append<Config>();
+        if (configPage.DataContext is not ConfigPageModel context) {
+            return;
         }
+        
+        context.SecondaryButtonIsEnabled = false;
+        context.Append<Config>();
     }
 
-    public SettingsViewModel() : base("Settings", Symbol.Settings)
+    public SettingsViewModel() : base(Locale[FvLocale.SettingsView_Title], Symbol.Settings)
     {
-        Content = _configPage;
+        Content = configPage;
     }
 }

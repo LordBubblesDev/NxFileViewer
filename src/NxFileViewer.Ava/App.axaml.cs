@@ -3,10 +3,13 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Avalonia.Styling;
 using ConfigFactory.Avalonia.Helpers;
+using Emignatik.NxFileViewer.Localization;
+using NxFileViewer.Ava.Localization;
+using NxFileViewer.Ava.Services;
 using NxFileViewer.Ava.ViewModels;
 using NxFileViewer.Ava.Views;
-using NxFileViewer.Ava.Localization;
 
 namespace NxFileViewer.Ava;
 
@@ -20,6 +23,7 @@ public class App : Application
     
     public override void Initialize()
     {
+        LocalizationManager.Resolve = key => Locale[key, failSoftly: true];
         AvaloniaXamlLoader.Load(this);
     }
 
@@ -32,12 +36,32 @@ public class App : Application
         // Line below is needed to remove Avalonia data validation.
         // Without this line you will get duplicate validations from both Avalonia and CT
         BindingPlugins.DataValidators.RemoveAt(0);
-        
-        desktop.MainWindow = new ShellView {
-            DataContext = new ShellViewModel(),
+
+        RequestedThemeVariant = Config.Shared.Theme switch {
+            "Light" => ThemeVariant.Light,
+            "Dark" => ThemeVariant.Dark,
+            _ => ThemeVariant.Default
         };
-        
-        BrowserDialog.StorageProvider = desktop.MainWindow.StorageProvider;
+
+        _ = AppServices.Current; // load keys and warn if prod.keys is missing
+
+        var viewModel = new ShellViewModel();
+        var shellView = new ShellView
+        {
+            DataContext = viewModel
+        };
+
+        viewModel.StorageProvider = shellView.StorageProvider;
+        desktop.MainWindow = shellView;
+        BrowserDialog.StorageProvider = shellView.StorageProvider;
+
+        if (desktop.Args is { Length: > 0 } args) {
+            var filePath = args[0];
+
+            if (File.Exists(filePath)) {
+                shellView.Opened += async (_, _) => await viewModel.OpenFilePath(filePath);
+            }
+        }
 
         base.OnFrameworkInitializationCompleted();
     }

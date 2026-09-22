@@ -77,6 +77,12 @@ public partial class Config : ConfigModule<Config>
     [Config(Header = "Ignore Missing Delta Fragments", Description = "", Group = "Integrity")]
     public partial bool IgnoreMissingDeltaFragments { get; set; } = true;
 
+    [ObservableProperty]
+    public partial string LastOpenedFile { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string LastUsedDir { get; set; } = string.Empty;
+
     public static List<SystemLanguage> GetLanguagesInternal()
         => Locale.Languages.Select(x => new SystemLanguage(x)).ToList();
 }

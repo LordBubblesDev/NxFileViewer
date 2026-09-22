@@ -1,0 +1,411 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:NxFileViewer.Ava.ViewModels"
+             xmlns:views="clr-namespace:NxFileViewer.Ava.Views"
+             xmlns:pi="https://github.com/projektanker/icons.avalonia"
+             xmlns:loc="clr-namespace:NxFileViewer.Ava.Localization"
+             mc:Ignorable="d" d:DesignWidth="850" d:DesignHeight="550"
+             x:Class="NxFileViewer.Ava.Views.OpenedFileView"
+             x:DataType="vm:OpenedFileViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="TabControl.compact">
+            <Setter Property="Padding" Value="0" />
+        </Style>
+        <Style Selector="TabControl.compact /template/ ItemsPresenter#PART_ItemsPresenter">
+            <Setter Property="Margin" Value="4,2,4,0" />
+        </Style>
+        <Style Selector="TabControl.compact TabItem">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="ClipToBounds" Value="False" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="Padding" Value="10,4,10,2" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="TabRoot"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="4,4,0,0"
+                            Padding="{TemplateBinding Padding}">
+                        <DockPanel>
+                            <Border x:Name="Underline"
+                                    DockPanel.Dock="Bottom"
+                                    Height="2"
+                                    Margin="0,3,0,0"
+                                    Background="{DynamicResource SystemAccentColorLight1}"
+                                    CornerRadius="1"
+                                    IsVisible="False" />
+                            <ContentPresenter Content="{TemplateBinding Header}"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </DockPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="TabControl.compact TabItem:selected">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorSecondaryBrush}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="TabControl.compact TabItem:selected /template/ Border#Underline">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="TabControl.compact TabItem:pointerover /template/ Border#TabRoot">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+        </Style>
+        <Style Selector="TabControl.compact TabItem:selected:pointerover /template/ Border#TabRoot">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorTertiaryBrush}" />
+        </Style>
+        <Style Selector="TabControl.compact TabStripItem">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="Padding" Value="10,4,10,2" />
+        </Style>
+        <Style Selector="TextBlock.fieldLabel">
+            <Setter Property="Opacity" Value="0.65" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Margin" Value="0,0,0,2" />
+        </Style>
+        <Style Selector="TextBlock.sectionTitle">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Margin" Value="0,0,0,6" />
+        </Style>
+        <Style Selector="Border.section">
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Padding" Value="10,8" />
+        </Style>
+        <Style Selector="TextBox.selectable">
+            <Setter Property="IsReadOnly" Value="True" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="Padding" Value="6,3" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="NoWrap" />
+        </Style>
+        <Style Selector="ComboBox.compact">
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="Height" Value="26" />
+            <Setter Property="Padding" Value="6,2" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="ComboBox.compact ComboBoxItem">
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="MinHeight" Value="26" />
+            <Setter Property="Padding" Value="8,4" />
+        </Style>
+        <Style Selector="Button.compact">
+            <Setter Property="MinHeight" Value="26" />
+            <Setter Property="MinWidth" Value="64" />
+            <Setter Property="Padding" Value="10,2" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.icon">
+            <Setter Property="MinHeight" Value="26" />
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="CheckBox.readonly">
+            <Setter Property="IsEnabled" Value="False" />
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+        </Style>
+    </UserControl.Styles>
+
+    <TabControl Classes="compact">
+        <!-- Overview tab -->
+        <TabItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[TabOverview]}">
+            <ScrollViewer>
+                <StackPanel Margin="10" Spacing="8">
+                    <!-- Integrity section -->
+                    <Border Classes="section">
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Top" Classes="sectionTitle"
+                                       Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[Title_FileInfo_Integrity]}" />
+                            <Grid ColumnDefinitions="Auto,*,Auto,16,Auto,*,Auto" RowDefinitions="Auto">
+                                <TextBlock Classes="fieldLabel" Margin="0,0,8,0" VerticalAlignment="Center"
+                                           Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[FileInfo_Signature]}" />
+                                <TextBox Grid.Column="1"
+                                         Classes="selectable"
+                                         FontWeight="SemiBold"
+                                         Foreground="{Binding SignatureBrush}"
+                                         Text="{Binding SignatureText, Mode=OneWay}" />
+                                <Button Grid.Column="2"
+                                        Classes="compact"
+                                        Margin="6,0,0,0"
+                                        Command="{Binding VerifySignatureCommand}"
+                                        Content="{Binding SignatureButtonText}"
+                                        ToolTip.Tip="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[ToolTip_NcaSignature]}" />
+
+                                <TextBlock Grid.Column="4" Classes="fieldLabel" Margin="0,0,8,0" VerticalAlignment="Center"
+                                           Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[FileInfo_Hash]}" />
+                                <TextBox Grid.Column="5"
+                                         Classes="selectable"
+                                         FontWeight="SemiBold"
+                                         Foreground="{Binding HashBrush}"
+                                         Text="{Binding HashText, Mode=OneWay}" />
+                                <Button Grid.Column="6"
+                                        Classes="compact"
+                                        Margin="6,0,0,0"
+                                        Command="{Binding VerifyHashCommand}"
+                                        Content="{Binding HashButtonText}"
+                                        ToolTip.Tip="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[ToolTip_NcaHash]}" />
+                            </Grid>
+                        </DockPanel>
+                    </Border>
+
+                    <!-- Missing keys -->
+                    <TextBlock Foreground="{DynamicResource SystemFillColorCautionBrush}"
+                               IsVisible="{Binding HasMissingKeys}"
+                               Text="{Binding MissingKeysText}"
+                               TextWrapping="Wrap" />
+
+                    <!-- Super-package picker -->
+                    <ComboBox Classes="compact"
+                              HorizontalAlignment="Left"
+                              MinWidth="160"
+                              IsVisible="{Binding IsSuperPackage}"
+                              ItemsSource="{Binding Packages}"
+                              SelectedItem="{Binding SelectedPackage}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="vm:CnmtPackageViewModel">
+                                <TextBlock Text="{Binding DisplayName}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <ContentControl Content="{Binding SelectedPackage}">
+                        <ContentControl.DataTemplates>
+                            <DataTemplate x:DataType="vm:CnmtPackageViewModel">
+                                <StackPanel Spacing="8">
+                                    <!-- General Info section -->
+                                    <Border Classes="section">
+                                        <DockPanel>
+                                            <TextBlock DockPanel.Dock="Top" Classes="sectionTitle"
+                                                       Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[FileInfo_GeneralInfo]}" />
+                                            <Grid ColumnDefinitions="*,8,*,8,*,8,Auto"
+                                                  RowDefinitions="Auto,8,Auto">
+                                                <StackPanel>
+                                                    <TextBlock Classes="fieldLabel"
+                                                               Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[Title_FileInfo_FileType]}" />
+                                                    <TextBox Classes="selectable" Text="{Binding FileType, Mode=OneWay}" />
+                                                </StackPanel>
+                                                <StackPanel Grid.Column="2">
+                                                    <TextBlock Classes="fieldLabel"
+                                                               Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[Title_FileInfo_Compression]}" />
+                                                    <TextBox Classes="selectable" Text="{Binding CompressionType, Mode=OneWay}" />
+                                                </StackPanel>
+                                                <StackPanel Grid.Column="4">
+                                                    <TextBlock Classes="fieldLabel"
+                                                               Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[FileInfo_Content]}" />
+                                                    <TextBox Classes="selectable" Text="{Binding ContentType, Mode=OneWay}" />
+                                                </StackPanel>
+                                                <StackPanel Grid.Column="6" MinWidth="160">
+                                                    <TextBlock Classes="fieldLabel"
+                                                               Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[CnmtOverview_TitleId]}" />
+                                                    <TextBox Classes="selectable" Text="{Binding TitleId, Mode=OneWay}" />
+                                                </StackPanel>
+
+                                                <StackPanel Grid.Row="2">
+                                                    <TextBlock Classes="fieldLabel"
+                                                               Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[CnmtOverview_TitleVersion]}" />
+                                                    <TextBox Classes="selectable" Text="{Binding TitleVersion, Mode=OneWay}" ToolTip.Tip="{Binding PatchLevel}" />
+                                                </StackPanel>
+                                                <StackPanel Grid.Row="2" Grid.Column="2">
+                                                    <TextBlock Classes="fieldLabel"
+                                                               Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[FileInfo_MinSystem]}" />
+                                                    <TextBox Classes="selectable" Text="{Binding MinimumSystemVersion, Mode=OneWay}" />
+                                                </StackPanel>
+                                                <StackPanel Grid.Row="2" Grid.Column="4">
+                                                    <TextBlock Classes="fieldLabel"
+                                                               Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[CnmtOverview_BuildID]}" />
+                                                    <TextBox Classes="selectable" Text="{Binding BuildId, Mode=OneWay}" />
+                                                </StackPanel>
+                                                <CheckBox Grid.Row="2"
+                                                          Grid.Column="6"
+                                                          Classes="readonly"
+                                                          Margin="8,0,0,0"
+                                                          ToolTip.Tip="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[ToolTip_IsDemo]}"
+                                                          IsChecked="{Binding IsDemo, Mode=OneWay}"
+                                                          Content="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[CnmtOverview_IsDemo]}" />
+                                            </Grid>
+                                        </DockPanel>
+                                    </Border>
+
+                                    <!-- Presentation section -->
+                                    <Border Classes="section" IsVisible="{Binding HasPresentation}">
+                                        <DockPanel>
+                                            <TextBlock DockPanel.Dock="Top" Classes="sectionTitle"
+                                                       Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[Presentation_Title]}" />
+                                            <DockPanel>
+                                                <StackPanel DockPanel.Dock="Right"
+                                                            Width="110"
+                                                            Margin="12,0,0,0"
+                                                            Spacing="4">
+                                                    <Border Width="110" Height="110"
+                                                            Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                                            BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                                                            BorderThickness="1"
+                                                            CornerRadius="4">
+                                                        <Image Source="{Binding SelectedTitle.Icon}" Stretch="Uniform">
+                                                            <Image.ContextMenu>
+                                                                <ContextMenu>
+                                                                    <MenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[ContextMenu_SaveImage]}"
+                                                                              Command="{Binding SaveIconCommand}" />
+                                                                    <MenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[ContextMenu_CopyImage]}"
+                                                                              Command="{Binding CopyIconCommand}" />
+                                                                </ContextMenu>
+                                                            </Image.ContextMenu>
+                                                        </Image>
+                                                    </Border>
+                                                    <Grid ColumnDefinitions="*,4,*">
+                                                        <Button Classes="icon"
+                                                                Command="{Binding SaveIconCommand}"
+                                                                ToolTip.Tip="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[ContextMenu_SaveImage]}">
+                                                            <pi:Icon Value="fa-regular fa-floppy-disk" />
+                                                        </Button>
+                                                        <Button Grid.Column="2"
+                                                                Classes="icon"
+                                                                Command="{Binding CopyIconCommand}"
+                                                                ToolTip.Tip="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[ContextMenu_CopyImage]}">
+                                                            <pi:Icon Value="fa-regular fa-copy" />
+                                                        </Button>
+                                                    </Grid>
+                                                </StackPanel>
+                                                <StackPanel Spacing="6">
+                                                    <Grid ColumnDefinitions="*,10,*">
+                                                        <StackPanel>
+                                                            <TextBlock Classes="fieldLabel"
+                                                                       Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[DisplayVersion]}" />
+                                                            <TextBox Classes="selectable" Text="{Binding DisplayVersion, Mode=OneWay}" />
+                                                        </StackPanel>
+                                                        <StackPanel Grid.Column="2">
+                                                            <TextBlock Classes="fieldLabel"
+                                                                       Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[AvailableLanguages]}" />
+                                                            <ComboBox Classes="compact"
+                                                                      ItemsSource="{Binding Titles}"
+                                                                      SelectedItem="{Binding SelectedTitle}"
+                                                                      ToolTip.Tip="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[ToolTip_AvailableLanguages]}">
+                                                                <ComboBox.ItemTemplate>
+                                                                    <DataTemplate x:DataType="vm:TitleLanguageViewModel">
+                                                                        <TextBlock VerticalAlignment="Center" Text="{Binding Language}" />
+                                                                    </DataTemplate>
+                                                                </ComboBox.ItemTemplate>
+                                                            </ComboBox>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                    <StackPanel>
+                                                        <TextBlock Classes="fieldLabel"
+                                                                   Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[AppTitle]}" />
+                                                        <TextBox Classes="selectable" TextWrapping="Wrap" Text="{Binding SelectedTitle.AppName, Mode=OneWay}" />
+                                                    </StackPanel>
+                                                    <StackPanel>
+                                                        <TextBlock Classes="fieldLabel"
+                                                                   Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[Publisher]}" />
+                                                        <TextBox Classes="selectable" TextWrapping="Wrap" Text="{Binding SelectedTitle.Publisher, Mode=OneWay}" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </DockPanel>
+                                    </Border>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ContentControl.DataTemplates>
+                    </ContentControl>
+                </StackPanel>
+            </ScrollViewer>
+        </TabItem>
+
+        <!-- Content tab -->
+        <TabItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[TabContent]}">
+            <Grid ColumnDefinitions="*,4,320" Margin="8">
+                <!-- Structure section -->
+                <Border Classes="section" Padding="0">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top"
+                                Padding="8,4"
+                                BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                                BorderThickness="0,0,0,1">
+                            <TextBlock FontSize="12" FontWeight="SemiBold"
+                                       Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[GroupBoxStructure]}" />
+                        </Border>
+                        <ScrollViewer Margin="4">
+                            <!-- Custom tree -->
+                            <ItemsControl ItemsSource="{Binding RootNodes}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:TreeNodeViewModel">
+                                        <views:TreeNodeView />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </DockPanel>
+                </Border>
+
+                <GridSplitter Grid.Column="1" ResizeDirection="Columns" />
+
+                <!-- Properties section -->
+                <Border Grid.Column="2" Classes="section" Padding="0">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top"
+                                Padding="8,4"
+                                BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                                BorderThickness="0,0,0,1">
+                            <TextBlock FontSize="12" FontWeight="SemiBold"
+                                       Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[GroupBoxProperties]}" />
+                        </Border>
+                        <TextBlock Margin="10"
+                                   Opacity="0.6"
+                                   IsVisible="{Binding !HasSelectedItem}"
+                                   TextWrapping="Wrap"
+                                   Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[Properties_SelectItemHint]}" />
+                        <DockPanel IsVisible="{Binding HasSelectedItem}">
+                            <Border DockPanel.Dock="Top"
+                                    Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                    BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                                    BorderThickness="0,0,0,1"
+                                    Padding="8,4">
+                                <Grid ColumnDefinitions="130,*">
+                                    <TextBlock FontSize="12" FontWeight="SemiBold"
+                                               Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[Properties_Name]}" />
+                                    <TextBlock Grid.Column="1" FontSize="12" FontWeight="SemiBold"
+                                               Text="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[Properties_Value]}" />
+                                </Grid>
+                            </Border>
+                            <ScrollViewer>
+                                <ItemsControl ItemsSource="{Binding Properties}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:ItemPropertyRow">
+                                            <Border BorderBrush="{DynamicResource ControlStrokeColorDefaultBrush}"
+                                                    BorderThickness="0,0,0,1"
+                                                    Padding="8,3">
+                                                <Grid ColumnDefinitions="130,*">
+                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Name}" TextWrapping="Wrap" />
+                                                    <TextBox Grid.Column="1"
+                                                             Classes="selectable"
+                                                             FontFamily="{StaticResource UbuntuMono}"
+                                                             TextWrapping="Wrap"
+                                                             Text="{Binding Value, Mode=OneWay}" />
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </DockPanel>
+                    </DockPanel>
+                </Border>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</UserControl>

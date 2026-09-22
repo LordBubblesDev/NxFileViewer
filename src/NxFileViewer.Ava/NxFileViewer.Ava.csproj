@@ -27,11 +27,14 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="ConfigFactory.Avalonia" Version="0.4.3" />
     <PackageReference Include="FluentAvaloniaUI" Version="2.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.1" />
     <PackageReference Include="Projektanker.Icons.Avalonia" Version="9.6.2" />
     <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.6.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NxFileViewer.Core\NxFileViewer.Core.csproj" />
     <ProjectReference Include="..\NxFileViewer.Ava.LocaleGenerator\NxFileViewer.Ava.LocaleGenerator.csproj"
                       OutputItemType="Analyzer"
                       ReferenceOutputAssembly="false" />

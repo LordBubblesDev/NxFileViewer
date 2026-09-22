@@ -1,9 +1,10 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:styling="clr-namespace:FluentAvalonia.Styling;assembly=FluentAvalonia"
-             xmlns:vm="clr-namespace:NxFileViewer.Ava.ViewModels"
+             xmlns:loc="clr-namespace:NxFileViewer.Ava.Localization"
              x:Class="NxFileViewer.Ava.App"
              RequestedThemeVariant="Default">
+    <!-- Resources -->
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -28,13 +29,16 @@
         </ResourceDictionary>
     </Application.Resources>
     
+    <!-- macOS application menu -->
     <NativeMenu.Menu>
         <NativeMenu>
-            <NativeMenuItem Header="Settings" Gesture="Meta+,"
+            <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[SettingsView_Title]}"
+                            Gesture="Meta+,"
                             Click="SettingsMenu_OnClick" />
         </NativeMenu>
     </NativeMenu.Menu>
     
+    <!-- Styles -->
     <Application.Styles>
         <styling:FluentAvaloniaTheme PreferUserAccentColor="True"
                                      PreferSystemTheme="True" />
