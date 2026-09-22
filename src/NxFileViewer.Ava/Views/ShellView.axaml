@@ -11,7 +11,7 @@
                      xmlns:loc="clr-namespace:NxFileViewer.Ava.Localization"
                      mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
                      Width="850"
-                     Height="{OnPlatform macOS=480, Linux=540, Default=510}"
+                     Height="{OnPlatform macOS=452, Default=510}"
                      x:Class="NxFileViewer.Ava.Views.ShellView"
                      x:DataType="vm:ShellViewModel"
                      Title="{x:Static ava:App.Title}"
