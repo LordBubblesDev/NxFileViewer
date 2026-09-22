@@ -212,7 +212,8 @@ public partial class ShellViewModel : ObservableObject
             var empty = Documents.OfType<EmptyDocument>().FirstOrDefault();
             if (empty != null) {
                 var index = Documents.IndexOf(empty);
-                Documents[index] = document;
+                Documents.RemoveAt(index);
+                Documents.Insert(index, document);
             }
             else {
                 Documents.Add(document);

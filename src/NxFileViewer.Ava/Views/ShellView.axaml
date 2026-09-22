@@ -126,7 +126,7 @@
                         CanDragTabs="True"
                         CanReorderTabs="True"
                         AddTabButtonClick="MainTabView_OnAddTabButtonClick"
-                        SelectedItem="{Binding CurrentDocument}"
+                        SelectedItem="{Binding CurrentDocument, Mode=TwoWay}"
                         TabItems="{Binding Documents}"
                         TabWidthMode="SizeToContent">
                 <ui:TabView.TabItemTemplate>
