@@ -43,7 +43,7 @@ public class SectionItem : ItemBase
 
     public sealed override string LibHacTypeName => FsHeader.GetType().Name;
 
-    public new NcaItem ParentItem { get; }
+    public NcaItem ParentItem { get; }
 
     public int SectionIndex { get; }
 

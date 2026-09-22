@@ -8,7 +8,7 @@ namespace Emignatik.NxFileViewer.Models.TreeItems.Impl;
 public abstract class PartitionFileEntryItemBase(DirectoryEntryEx fileEntry, PartitionFileSystemItemBase parentItem)
     : ItemBase(parentItem)
 {
-    public new PartitionFileSystemItemBase ParentItem { get; } = parentItem ?? throw new ArgumentNullException(nameof(parentItem));
+    public PartitionFileSystemItemBase ParentItem { get; } = parentItem ?? throw new ArgumentNullException(nameof(parentItem));
 
     public DirectoryEntryEx FileEntry { get; } = fileEntry ?? throw new ArgumentNullException(nameof(fileEntry));
 
