@@ -2,6 +2,9 @@
 using System.IO;
 using System.Text;
 using Emignatik.NxFileViewer.Localization;
+using Emignatik.NxFileViewer.Utils.LibHacExtensions;
+using LibHac.Common;
+using LibHac.Fs;
 using Microsoft.Extensions.Logging;
 
 namespace Emignatik.NxFileViewer.FileLoading;
@@ -17,6 +20,11 @@ public class PackageTypeAnalyzer : IPackageTypeAnalyzer
 
     public PackageType GetType(string filePath)
     {
+        if (Directory.Exists(filePath)) {
+            using var storage = SplitFileStorage.OpenFolder(filePath);
+            return IsNsp(storage) ? PackageType.NSP : PackageType.XCI;
+        }
+
         using var fileStream = File.OpenRead(filePath);
         var buffer = new byte[0x104];
         var read = fileStream.Read(buffer);
@@ -33,9 +41,16 @@ public class PackageTypeAnalyzer : IPackageTypeAnalyzer
         }
     }
 
+    private static bool IsNsp(IStorage storage)
+    {
+        Span<byte> buffer = stackalloc byte[4];
+        storage.Read(0, buffer).ThrowIfFailure();
+        return buffer.SequenceEqual("PFS0"u8);
+    }
+
     private void CheckExtensionConsistency(string filePath, string expectedExt1, string expectedExt2)
     {
-        var fileExtension = Path.GetExtension(filePath);
+        var fileExtension = System.IO.Path.GetExtension(filePath);
         if (!string.Equals(fileExtension, expectedExt1, StringComparison.OrdinalIgnoreCase) &&
             !string.Equals(fileExtension, expectedExt2, StringComparison.OrdinalIgnoreCase)) {
             _logger.LogWarning(LoadingLocalizationKeys.SuspiciousFileExtension.SafeFormat(fileExtension, expectedExt1, expectedExt2));

@@ -53,7 +53,7 @@ public class App : Application
         if (desktop.Args is { Length: > 0 } args) {
             var filePath = args[0];
 
-            if (File.Exists(filePath)) {
+            if (Path.Exists(filePath)) {
                 shellView.Opened += async (_, _) => await viewModel.OpenFilePath(filePath);
             }
         }

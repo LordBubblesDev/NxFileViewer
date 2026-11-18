@@ -37,6 +37,7 @@ public static class LoadingLocalizationKeys
     public static string LoadingErrorMainFileMissingLog => LocalizationManager.Get("LoadingError_MainFileMissing_Log");
     public static string LoadingErrorIconMissingLog => LocalizationManager.Get("LoadingError_IconMissing_Log");
     public static string LoadingErrorXciSecurePartitionNotFoundLog => LocalizationManager.Get("LoadingError_XciSecurePartitionNotFound_Log");
+    public static string LoadingErrorSplitFolderEmpty => LocalizationManager.Get("LoadingError_SplitFolderEmpty");
     public static string LoadingErrorFailedToGetNcaSectionFsHeader => LocalizationManager.Get("LoadingError_FailedToGetNcaSectionFsHeader");
     public static string LoadingErrorFailedToOpenMainFile => LocalizationManager.Get("LoadingError_FailedToOpenMainFile");
     public static string LoadingErrorFailedToLoadMainFile => LocalizationManager.Get("LoadingError_FailedToLoadMainFile");

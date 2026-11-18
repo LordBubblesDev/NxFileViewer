@@ -13,9 +13,14 @@ public sealed class FileOpeningService(IFileLoader fileLoader, ILoggerFactory lo
     {
         try {
             Config.Shared.LastOpenedFile = filePath;
-            var directory = Path.GetDirectoryName(filePath);
-            if (!string.IsNullOrEmpty(directory)) {
-                Config.Shared.LastUsedDir = directory;
+            if (Directory.Exists(filePath)) {
+                Config.Shared.LastUsedDir = filePath;
+            }
+            else {
+                var directory = Path.GetDirectoryName(filePath);
+                if (!string.IsNullOrEmpty(directory)) {
+                    Config.Shared.LastUsedDir = directory;
+                }
             }
 
             AppStatus.Set(Locale[FvLocale.Status_LoadingFile], "fa-regular fa-hourglass", StatusType.Working);

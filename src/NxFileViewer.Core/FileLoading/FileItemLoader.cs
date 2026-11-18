@@ -46,7 +46,7 @@ public class FileItemLoader : IFileItemLoader
     public NspItem LoadNsp(string nspFilePath)
     {
         var keySet = _keySetProviderService.GetKeySet(_appSettings.AlwaysReloadKeysBeforeOpen);
-        var nspItem = NspItem.FromFile(nspFilePath, keySet);
+        var nspItem = NspItem.FromStorage(OpenStorage(nspFilePath), GetItemName(nspFilePath), keySet);
         BuildPartitionChildItems(nspItem);
         return nspItem;
     }
@@ -54,9 +54,22 @@ public class FileItemLoader : IFileItemLoader
     public XciItem LoadXci(string xciFilePath)
     {
         var keySet = _keySetProviderService.GetKeySet(_appSettings.AlwaysReloadKeysBeforeOpen);
-        var xciItem = XciItem.FromFile(xciFilePath, keySet);
+        var xciItem = XciItem.FromStorage(OpenStorage(xciFilePath), GetItemName(xciFilePath), keySet);
         BuildXciChildItems(xciItem);
         return xciItem;
+    }
+
+    private static IStorage OpenStorage(string path)
+    {
+        return Directory.Exists(path)
+            ? SplitFileStorage.OpenFolder(path)
+            : new LocalStorage(path, FileAccess.Read);
+    }
+
+    private static string GetItemName(string path)
+    {
+        var name = new DirectoryInfo(path).Name;
+        return string.IsNullOrEmpty(name) ? path : name;
     }
 
     private void BuildXciChildItems(XciItem parentItem)

@@ -41,12 +41,12 @@ public class XciItem : ItemBase
 
     public static XciItem FromFile(string xciFilePath, KeySet keySet)
     {
-        var fileStorage = new LocalStorage(xciFilePath, FileAccess.Read);
+        return FromStorage(new LocalStorage(xciFilePath, FileAccess.Read), System.IO.Path.GetFileName(xciFilePath), keySet);
+    }
 
-        var xci = new Xci(keySet, fileStorage);
-
-        var xciItem = new XciItem(xci, System.IO.Path.GetFileName(xciFilePath), fileStorage, keySet);
-
-        return xciItem;
+    public static XciItem FromStorage(IStorage storage, string name, KeySet keySet)
+    {
+        var xci = new Xci(keySet, storage);
+        return new XciItem(xci, name, storage, keySet);
     }
 }

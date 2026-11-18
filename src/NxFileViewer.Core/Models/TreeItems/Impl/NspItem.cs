@@ -37,9 +37,12 @@ public class NspItem : PartitionFileSystemItemBase
 
     public static NspItem FromFile(string nspFilePath, KeySet keySet)
     {
-        var localStorage = new LocalStorage(nspFilePath, FileAccess.Read);
-        var partitionFileSystem = localStorage.LoadPartition();
-        var nspItem = new NspItem(partitionFileSystem, System.IO.Path.GetFileName(nspFilePath), keySet, localStorage);
-        return nspItem;
+        return FromStorage(new LocalStorage(nspFilePath, FileAccess.Read), System.IO.Path.GetFileName(nspFilePath), keySet);
+    }
+
+    public static NspItem FromStorage(IStorage storage, string name, KeySet keySet)
+    {
+        var partitionFileSystem = storage.LoadPartition();
+        return new NspItem(partitionFileSystem, name, keySet, storage);
     }
 }

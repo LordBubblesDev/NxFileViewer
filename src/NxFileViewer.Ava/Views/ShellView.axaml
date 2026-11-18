@@ -35,6 +35,7 @@
     <!-- Key bindings -->
     <windowing:FAAppWindow.KeyBindings>
         <KeyBinding Gesture="Ctrl+O" Command="{Binding OpenFileCommand}" />
+        <KeyBinding Gesture="Ctrl+Alt+O" Command="{Binding OpenSplitFolderCommand}" />
         <KeyBinding Gesture="Ctrl+Shift+O" Command="{Binding OpenPreviousCommand}" />
         <KeyBinding Gesture="Ctrl+Shift+C" Command="{Binding CloseCommand}" />
         <KeyBinding Gesture="Ctrl+Alt+S" Command="{Binding OpenSettingsCommand}" />
@@ -53,6 +54,9 @@
                     <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_OpenLast]}"
                                     Command="{Binding OpenPreviousCommand}"
                                     Gesture="{OnPlatform macOS='Meta+Shift+O', Default='Ctrl+Shift+O'}" />
+                    <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_OpenSplitFolder]}"
+                                    Command="{Binding OpenSplitFolderCommand}"
+                                    Gesture="{OnPlatform macOS='Meta+Alt+O', Default='Ctrl+Alt+O'}" />
                     <NativeMenuItem Header="{Binding Source={x:Static loc:LocaleManager.Locale}, Path=[MenuItem_Close]}"
                                     Command="{Binding CloseCommand}"
                                     Gesture="{OnPlatform macOS='Meta+Shift+W', Default='Ctrl+Shift+C'}" />

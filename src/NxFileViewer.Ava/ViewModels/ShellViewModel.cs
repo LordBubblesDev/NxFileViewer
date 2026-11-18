@@ -94,10 +94,30 @@ public partial class ShellViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task OpenSplitFolder()
+    {
+        if (StorageProvider == null) {
+            return;
+        }
+
+        var folders = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+        {
+            Title = Locale[FvLocale.MenuItem_OpenSplitFolder],
+            AllowMultiple = false,
+            SuggestedStartLocation = await TryGetLastUsedFolder()
+        });
+
+        var path = folders.Count > 0 ? folders[0].TryGetLocalPath() : null;
+        if (!string.IsNullOrEmpty(path)) {
+            await OpenFilePath(path);
+        }
+    }
+
+    [RelayCommand]
     private async Task OpenPrevious()
     {
         var lastOpened = Config.Shared.LastOpenedFile;
-        if (string.IsNullOrWhiteSpace(lastOpened) || !File.Exists(lastOpened)) {
+        if (string.IsNullOrWhiteSpace(lastOpened) || !Path.Exists(lastOpened)) {
             AppStatus.SetTemporaryLong(Locale[FvLocale.Status_NoPreviouslyOpenedFile], "fa-regular fa-circle-xmark");
             return;
         }
